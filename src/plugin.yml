@@ -1,0 +1,11 @@
+name: MiniGameWorld-Controller
+main: com.worldbiomusic.minigameworld.controller.MiniGameWorldControllerMain
+version: 0.1
+author: worldbiomusic
+api-version: 1.14
+depend: [MiniGameWorld]
+
+commands:
+  mwcontrol:
+    aliases: [mwc]
+    
