@@ -1,5 +1,6 @@
 package com.worldbiomusic.minigameworld.controller;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.wbm.plugin.util.Metrics;
@@ -7,6 +8,7 @@ import com.worldbiomusic.minigameworld.api.MiniGameWorld;
 import com.worldbiomusic.minigameworld.controller.cmds.ControlCommand;
 import com.worldbiomusic.minigameworld.controller.listeners.MiniGameEventListener;
 import com.worldbiomusic.minigameworld.controller.managers.MiniGameStartManager;
+import com.worldbiomusic.minigameworld.controller.utils.Utils;
 
 public class MiniGameWorldControllerMain extends JavaPlugin {
 	private MiniGameStartManager minigameStartManager;
@@ -31,6 +33,9 @@ public class MiniGameWorldControllerMain extends JavaPlugin {
 		// listeners
 		this.minigameListener = new MiniGameEventListener(this.minigameStartManager);
 		getServer().getPluginManager().registerEvents(this.minigameListener, this);
+
+		// set basic permissions to false
+		Bukkit.getOnlinePlayers().stream().filter(p -> !p.isOp()).forEach(Utils::setBasicPermissionsToFalse);
 	}
 
 	@Override

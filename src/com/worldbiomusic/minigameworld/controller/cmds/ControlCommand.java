@@ -160,6 +160,7 @@ public class ControlCommand implements CommandExecutor {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void play(CommandSender sender, String[] args) throws Exception {
 		// /mwc <join | view | leave> <minigame> [<player> [<player> [<player> ...]]]:
 		// Control all(specific) players (not OP)
