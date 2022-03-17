@@ -13,12 +13,12 @@ public class MiniGameStartManager {
 	}
 
 	public void setFlag(MiniGameAccessor minigame, boolean flag) {
-		String minigameTitle = (String) minigame.getSettings().get("title");
+		String minigameTitle = minigame.getSettings().getTitle();
 		this.flags.put(minigameTitle, flag);
 	}
 
 	public boolean getFlag(MiniGameAccessor minigame) {
-		String minigameTitle = (String) minigame.getSettings().get("title");
+		String minigameTitle = minigame.getSettings().getTitle();
 		if (!this.flags.containsKey(minigameTitle)) {
 			return false;
 		}

@@ -98,7 +98,7 @@ public class ControlCommand implements CommandExecutor {
 			// set flag to true
 			this.minigameStartManager.setFlag(minigame, true);
 
-			String minigameTitle = (String) minigame.getSettings().get("title");
+			String minigameTitle = minigame.getSettings().getTitle();
 			this.mw.startGame(minigameTitle);
 
 			// set flag to false
