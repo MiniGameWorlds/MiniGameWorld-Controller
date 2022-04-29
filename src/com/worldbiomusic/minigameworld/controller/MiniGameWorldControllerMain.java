@@ -7,10 +7,12 @@ import com.wbm.plugin.util.Metrics;
 import com.worldbiomusic.minigameworld.api.MiniGameWorld;
 import com.worldbiomusic.minigameworld.controller.cmds.ControlCommand;
 import com.worldbiomusic.minigameworld.controller.listeners.MiniGameEventListener;
+import com.worldbiomusic.minigameworld.controller.managers.MiniGameControlManager;
 import com.worldbiomusic.minigameworld.controller.managers.MiniGameStartManager;
 import com.worldbiomusic.minigameworld.controller.utils.Utils;
 
 public class MiniGameWorldControllerMain extends JavaPlugin {
+	private MiniGameControlManager controlManager;
 	private MiniGameStartManager minigameStartManager;
 	private ControlCommand controlCommand;
 	private MiniGameEventListener minigameListener;
@@ -26,8 +28,11 @@ public class MiniGameWorldControllerMain extends JavaPlugin {
 		this.minigameStartManager = new MiniGameStartManager();
 		this.mw = MiniGameWorld.create(MiniGameWorld.API_VERSION);
 
+		// managers
+		this.controlManager = new MiniGameControlManager(mw, minigameStartManager);
+
 		// register command
-		this.controlCommand = new ControlCommand(this, this.minigameStartManager, this.mw);
+		this.controlCommand = new ControlCommand(this, this.minigameStartManager, this.mw, controlManager);
 		getCommand("mwcontrol").setExecutor(this.controlCommand);
 
 		// listeners

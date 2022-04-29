@@ -10,12 +10,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.worldbiomusic.minigameworld.MiniGameWorldMain;
 import com.worldbiomusic.minigameworld.api.MiniGameAccessor;
 import com.worldbiomusic.minigameworld.api.MiniGameWorld;
 import com.worldbiomusic.minigameworld.api.MiniGameWorldUtils;
+import com.worldbiomusic.minigameworld.controller.managers.MiniGameControlManager;
 import com.worldbiomusic.minigameworld.controller.managers.MiniGameStartManager;
-import com.worldbiomusic.minigameworld.customevents.minigame.MiniGameExceptionEvent;
 import com.worldbiomusic.minigameworld.util.Setting;
 
 /*
@@ -26,14 +25,17 @@ import com.worldbiomusic.minigameworld.util.Setting;
  */
 public class ControlCommand implements CommandExecutor {
 	private JavaPlugin plugin;
+	private MiniGameControlManager controlManager;
 	private MiniGameStartManager minigameStartManager;
 	private MiniGameWorld mw;
 	private ControlCommandTabCompleter tabCompleter;
 
-	public ControlCommand(JavaPlugin plugin, MiniGameStartManager minigameStartManager, MiniGameWorld mw) {
+	public ControlCommand(JavaPlugin plugin, MiniGameStartManager minigameStartManager, MiniGameWorld mw,
+			MiniGameControlManager controlManager) {
 		this.plugin = plugin;
 		this.minigameStartManager = minigameStartManager;
 		this.mw = mw;
+		this.controlManager = controlManager;
 
 		this.tabCompleter = new ControlCommandTabCompleter(mw);
 		this.plugin.getCommand("mwcontrol").setTabCompleter(this.tabCompleter);
@@ -78,6 +80,7 @@ public class ControlCommand implements CommandExecutor {
 	private void start(CommandSender sender, String[] args) throws Exception {
 		// /mwc start [<minigame>]: start <minigame> minigame
 
+		String minigameTitle = "";
 		if (args.length == 1) {
 			// start minigame sender is already in
 			if (!(sender instanceof Player)) {
@@ -87,44 +90,33 @@ public class ControlCommand implements CommandExecutor {
 
 			Player p = (Player) sender;
 
-			// check player is in any minigmae to start
+			// check player is in any minigame to start
 			if (!MiniGameWorldUtils.checkPlayerIsInMiniGame(p)) {
-				p.sendMessage("You are NOT in any minigame");
+				p.sendMessage("You are NOT in any minigame to start");
 				return;
 			}
 
 			MiniGameAccessor minigame = MiniGameWorldUtils.getInMiniGame(p);
-
-			// set flag to true
-			this.minigameStartManager.setFlag(minigame, true);
-
-			String minigameTitle = minigame.getSettings().getTitle();
-			this.mw.startGame(minigameTitle);
-
-			// set flag to false
-			this.minigameStartManager.setFlag(minigame, false);
+			minigameTitle = minigame.getSettings().getTitle();
 		} else if (args.length == 2) {
 			// start <minigame> minigame
-			String minigameTitle = args[1];
+			minigameTitle = args[1];
+		} else {
+			return;
+		}
 
-			MiniGameAccessor minigame = MiniGameWorldUtils.getMiniGameWithTitle(minigameTitle);
-			if (minigame == null) {
-				sender.sendMessage(minigameTitle + " is not exist");
-				return;
-			}
-
-			// set flag to true
-			this.minigameStartManager.setFlag(minigame, true);
-
-			this.mw.startGame(minigameTitle);
-
-			// set flag to false
-			this.minigameStartManager.setFlag(minigame, false);
+		// start game
+		boolean isStarted = this.controlManager.startGame(minigameTitle);
+		if (!isStarted) {
+			sender.sendMessage(minigameTitle + " is not exist");
+			return;
 		}
 	}
 
 	private void finish(CommandSender sender, String[] args) throws Exception {
 		// /mwc finish [<minigame>]: finish <minigame> minigame
+
+		String minigameTitle = "";
 		if (args.length == 1) {
 			// start minigame sender is already in
 			if (!(sender instanceof Player)) {
@@ -136,34 +128,32 @@ public class ControlCommand implements CommandExecutor {
 
 			// check player is in any minigmae to start
 			if (!MiniGameWorldUtils.checkPlayerIsInMiniGame(p)) {
-				p.sendMessage("You are NOT in any minigame");
+				p.sendMessage("You are NOT in any minigame to finish");
 				return;
 			}
 
-			// call exception event to finish the minigame
 			MiniGameAccessor minigame = MiniGameWorldUtils.getInMiniGame(p);
-			MiniGameExceptionEvent exception = new MiniGameExceptionEvent(minigame, "finished-by-controller");
-			MiniGameWorldMain.getInstance().getServer().getPluginManager().callEvent(exception);
+			minigameTitle = minigame.getSettings().getTitle();
 		} else if (args.length == 2) {
 			// start <minigame> minigame
-			String minigameTitle = args[1];
+			minigameTitle = args[1];
+		} else {
+			return;
+		}
 
-			MiniGameAccessor minigame = MiniGameWorldUtils.getMiniGameWithTitle(minigameTitle);
-			if (minigame == null) {
-				sender.sendMessage(minigameTitle + " is not exist");
-				return;
-			}
-
-			// call exception event to finish the minigame
-			MiniGameExceptionEvent exception = new MiniGameExceptionEvent(minigame, "finished-by-controller");
-			MiniGameWorldMain.getInstance().getServer().getPluginManager().callEvent(exception);
+		// finish game
+		boolean isFinished = this.controlManager.finishGame(minigameTitle);
+		if (!isFinished) {
+			sender.sendMessage(minigameTitle + " is not exist");
+			return;
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private void play(CommandSender sender, String[] args) throws Exception {
-		// /mwc <join | view | leave> <minigame> [<player> [<player> [<player> ...]]]:
-		// Control all(specific) players (not OP)
+		// /mwc <join | leave | view | unview> <minigame> [<player> [<player> [<player>
+		// ...]]]:
+		// Control all players except for OPs
 		List<Player> players = new ArrayList<>();
 
 		// check command has players arguments
@@ -182,25 +172,9 @@ public class ControlCommand implements CommandExecutor {
 		}
 
 		String minigameTitle = args[1];
-		MiniGameWorldUtils.getMiniGameWithTitle(minigameTitle);
-
-		// check title minigame is exist
-		if (minigameTitle == null) {
-			sender.sendMessage(minigameTitle + " is not exist");
-			return;
-		}
-
 		String menu = args[0];
-		if (menu.equals("join")) {
-			players.forEach(p -> this.mw.joinGame(p, minigameTitle));
-		} else if (menu.equals("leave")) {
-			players.forEach(p -> this.mw.leaveGame(p));
-		} else if (menu.equals("view")) {
-			players.forEach(p -> this.mw.viewGame(p, minigameTitle));
-		} else if (menu.equals("unview")) {
-			players.forEach(p -> this.mw.unviewGame(p));
-		}
 
+		players.forEach(p -> this.controlManager.option(menu, p, minigameTitle));
 	}
 
 }
