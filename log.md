@@ -1,5 +1,4 @@
 # TODO
-- GUI controller menu
 
 ---
 
@@ -13,3 +12,4 @@
 
 # 2022-05-01
 - Add control menu mode
+- Release 0.3

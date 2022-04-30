@@ -17,8 +17,9 @@
 
 # Menu
 ![image](https://user-images.githubusercontent.com/61288262/166116384-f0ca54f4-0c5b-4861-95cf-e5602b370c42.png)
-- Control only works when Control is enabled
-- Icon works different on player's position(in/out minigame)
+- Command: `/mw menu`
+- Control only works when Control mode is enabled
+- Icon works differently on player's position(in/out of minigame)
 
 ## Icons
 ### `Control`
