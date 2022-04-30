@@ -10,3 +10,6 @@
 # 2022-03-18
 - Update for latest API
 - Release 0.2
+
+# 2022-05-01
+- Add control menu mode

@@ -1,11 +1,10 @@
 package com.worldbiomusic.minigameworld.controller.managers;
 
-import org.bukkit.entity.Player;
-
 import com.worldbiomusic.minigameworld.MiniGameWorldMain;
 import com.worldbiomusic.minigameworld.api.MiniGameAccessor;
 import com.worldbiomusic.minigameworld.api.MiniGameWorld;
 import com.worldbiomusic.minigameworld.api.MiniGameWorldUtils;
+import com.worldbiomusic.minigameworld.controller.utils.Utils;
 import com.worldbiomusic.minigameworld.customevents.minigame.MiniGameExceptionEvent;
 
 public class MiniGameControlManager {
@@ -48,54 +47,52 @@ public class MiniGameControlManager {
 		return true;
 	}
 
-	public boolean joinGame(Player p, String title) {
+	public boolean joinGame(String title) {
 		// check title minigame is exist
 		if (title == null) {
-			p.sendMessage(title + " is not exist");
 			return false;
 		}
 
-		this.mw.joinGame(p, title);
+		Utils.getNonOps().forEach(p -> this.mw.joinGame(p, title));
 		return true;
 	}
 
-	public void leaveGame(Player p) {
-		this.mw.leaveGame(p);
+	public void leaveGame() {
+		Utils.getNonOps().forEach(p -> this.mw.leaveGame(p));
 	}
 
-	public boolean viewGame(Player p, String title) {
+	public boolean viewGame(String title) {
 		// check title minigame is exist
 		if (title == null) {
-			p.sendMessage(title + " is not exist");
 			return false;
 		}
 
-		this.mw.viewGame(p, title);
+		Utils.getNonOps().forEach(p -> this.mw.viewGame(p, title));
 		return true;
 	}
 
-	public void unviewGame(Player p) {
-		this.mw.unviewGame(p);
+	public void unviewGame() {
+		Utils.getNonOps().forEach(p -> this.mw.unviewGame(p));
 	}
 
-	public boolean option(String option, Player p, String title) {
+	public boolean option(String option, String title) {
 		switch (option) {
 		case "start":
 			return startGame(title);
 		case "finish":
 			return finishGame(title);
 		case "join":
-			return joinGame(p, title);
+			return joinGame(title);
 		case "view":
-			return viewGame(p, title);
+			return viewGame(title);
 		case "leave":
-			leaveGame(p);
+			leaveGame();
 			return true;
 		case "unview":
-			unviewGame(p);
+			unviewGame();
 			return true;
 		}
-		
+
 		return false;
 	}
 }

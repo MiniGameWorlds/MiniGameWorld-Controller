@@ -14,7 +14,6 @@ import com.worldbiomusic.minigameworld.api.MiniGameAccessor;
 import com.worldbiomusic.minigameworld.api.MiniGameWorld;
 import com.worldbiomusic.minigameworld.api.MiniGameWorldUtils;
 import com.worldbiomusic.minigameworld.controller.managers.MiniGameControlManager;
-import com.worldbiomusic.minigameworld.controller.managers.MiniGameStartManager;
 import com.worldbiomusic.minigameworld.util.Setting;
 
 /*
@@ -26,16 +25,13 @@ import com.worldbiomusic.minigameworld.util.Setting;
 public class ControlCommand implements CommandExecutor {
 	private JavaPlugin plugin;
 	private MiniGameControlManager controlManager;
-	private MiniGameStartManager minigameStartManager;
-	private MiniGameWorld mw;
 	private ControlCommandTabCompleter tabCompleter;
+	private MiniGameWorld mw;
 
-	public ControlCommand(JavaPlugin plugin, MiniGameStartManager minigameStartManager, MiniGameWorld mw,
-			MiniGameControlManager controlManager) {
+	public ControlCommand(JavaPlugin plugin, MiniGameWorld mw, MiniGameControlManager controlManager) {
 		this.plugin = plugin;
-		this.minigameStartManager = minigameStartManager;
-		this.mw = mw;
 		this.controlManager = controlManager;
+		this.mw = mw;
 
 		this.tabCompleter = new ControlCommandTabCompleter(mw);
 		this.plugin.getCommand("mwcontrol").setTabCompleter(this.tabCompleter);
@@ -149,17 +145,19 @@ public class ControlCommand implements CommandExecutor {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void play(CommandSender sender, String[] args) throws Exception {
 		// /mwc <join | leave | view | unview> <minigame> [<player> [<player> [<player>
 		// ...]]]:
-		// Control all players except for OPs
-		List<Player> players = new ArrayList<>();
+		String minigameTitle = args[1];
+		String menu = args[0];
 
-		// check command has players arguments
+		// for non OPs
 		if (args.length < 3) {
-			players = (List<Player>) Bukkit.getOnlinePlayers().stream().filter(p -> !p.isOp()).toList();
-		} else {
+			this.controlManager.option(menu, minigameTitle);
+		}
+		// for specific players
+		else {
+			List<Player> players = new ArrayList<>();
 			for (int i = 2; i < args.length; i++) {
 				String playerName = args[i];
 				Player player = Bukkit.getPlayer(playerName);
@@ -169,12 +167,23 @@ public class ControlCommand implements CommandExecutor {
 					players.add(player);
 				}
 			}
+
+			switch (menu) {
+			case "join":
+				players.forEach(p -> this.mw.joinGame(p, minigameTitle));
+				break;
+			case "view":
+				players.forEach(p -> this.mw.viewGame(p, minigameTitle));
+				break;
+			case "leave":
+				players.forEach(p -> this.mw.leaveGame(p));
+				break;
+			case "unview":
+				players.forEach(p -> this.mw.unviewGame(p));
+				break;
+			}
 		}
 
-		String minigameTitle = args[1];
-		String menu = args[0];
-
-		players.forEach(p -> this.controlManager.option(menu, p, minigameTitle));
 	}
 
 }

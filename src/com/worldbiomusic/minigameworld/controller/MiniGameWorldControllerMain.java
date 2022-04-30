@@ -16,7 +16,11 @@ public class MiniGameWorldControllerMain extends JavaPlugin {
 	private MiniGameStartManager minigameStartManager;
 	private ControlCommand controlCommand;
 	private MiniGameEventListener minigameListener;
-	private MiniGameWorld mw;
+	static private MiniGameWorld mw;
+
+	public static MiniGameWorld getMiniGameWorld() {
+		return mw;
+	}
 
 	@Override
 	public void onEnable() {
@@ -26,17 +30,17 @@ public class MiniGameWorldControllerMain extends JavaPlugin {
 		new Metrics(this, 14517);
 
 		this.minigameStartManager = new MiniGameStartManager();
-		this.mw = MiniGameWorld.create(MiniGameWorld.API_VERSION);
+		mw = MiniGameWorld.create(MiniGameWorld.API_VERSION);
 
 		// managers
 		this.controlManager = new MiniGameControlManager(mw, minigameStartManager);
 
 		// register command
-		this.controlCommand = new ControlCommand(this, this.minigameStartManager, this.mw, controlManager);
+		this.controlCommand = new ControlCommand(this, mw, controlManager);
 		getCommand("mwcontrol").setExecutor(this.controlCommand);
 
 		// listeners
-		this.minigameListener = new MiniGameEventListener(this.minigameStartManager);
+		this.minigameListener = new MiniGameEventListener(this.minigameStartManager, controlManager);
 		getServer().getPluginManager().registerEvents(this.minigameListener, this);
 
 		// set basic permissions to false
