@@ -61,6 +61,10 @@ public class MiniGameControlManager {
 			}
 		}.runTaskTimer(MiniGameWorldMain.getInstance(), 0, 20);
 
+		// msg to OPs
+		sendMsgToOps(title + ChatColor.AQUA + " starts in ... " + ChatColor.RED + ChatColor.BOLD + Settings.START_DELAY
+				+ ChatColor.RESET + " seconds");
+
 		return true;
 	}
 
@@ -70,9 +74,14 @@ public class MiniGameControlManager {
 			return false;
 		}
 
+		int count = minigame.getPlayers().size();
+
 		// call exception event to finish the minigame
 		MiniGameExceptionEvent exception = new MiniGameExceptionEvent(minigame, "finished-by-controller");
 		MiniGameWorldMain.getInstance().getServer().getPluginManager().callEvent(exception);
+
+		// msg to OPs
+		sendMsgToOps(title + " has finished (" + count + " players quit)");
 
 		return true;
 	}
@@ -83,12 +92,22 @@ public class MiniGameControlManager {
 			return false;
 		}
 
+		MiniGameAccessor minigame = MiniGameWorldUtils.getMiniGameWithTitle(title);
+		int joinedCount = minigame.getPlayers().size();
 		Utils.getNonOps().forEach(p -> this.mw.joinGame(p, title));
+		joinedCount = minigame.getPlayers().size() - joinedCount;
+
+		// msg to OPs
+		sendMsgToOps(joinedCount + " Players joined " + title);
+
 		return true;
 	}
 
 	public void leaveGame() {
 		Utils.getNonOps().forEach(p -> this.mw.leaveGame(p));
+
+		// msg to OPs
+		sendMsgToOps("Players left games");
 	}
 
 	public boolean viewGame(String title) {
@@ -97,12 +116,26 @@ public class MiniGameControlManager {
 			return false;
 		}
 
+		MiniGameAccessor minigame = MiniGameWorldUtils.getMiniGameWithTitle(title);
+		int joinedCount = minigame.getViewers().size();
 		Utils.getNonOps().forEach(p -> this.mw.viewGame(p, title));
+		joinedCount = minigame.getViewers().size() - joinedCount;
+
+		// msg to OPs
+		sendMsgToOps(joinedCount + " Players starts viewing " + title);
+
 		return true;
 	}
 
 	public void unviewGame() {
 		Utils.getNonOps().forEach(p -> this.mw.unviewGame(p));
+
+		// msg to OPs
+		sendMsgToOps("Players left game views");
+	}
+
+	private void sendMsgToOps(String msg) {
+		Utils.getOps().forEach(p -> p.sendMessage(msg));
 	}
 
 	public boolean option(String option, String title) {

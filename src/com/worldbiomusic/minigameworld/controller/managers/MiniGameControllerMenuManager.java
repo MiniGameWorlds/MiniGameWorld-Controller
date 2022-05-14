@@ -117,10 +117,7 @@ public class MiniGameControllerMenuManager {
 	}
 
 	private boolean isControlRelativeBaseOrOptionIcon(ItemStack icon) {
-		if (icon.equals(BaseIcon.LEAVE_GAME.getItem()) || OptionIcon.checkIcon(icon)) {
-			return true;
-		}
-		return false;
+		return icon.equals(BaseIcon.LEAVE_GAME.getItem()) || OptionIcon.checkIcon(icon);
 	}
 
 	private void processOptionIcon(MenuClickEvent e) {
@@ -139,7 +136,7 @@ public class MiniGameControllerMenuManager {
 			// start all games
 			if (icon.equals(OptionIcon.START_ICON.getItem())) {
 				MiniGameWorld mw = MiniGameWorldControllerMain.getMiniGameWorld();
-				mw.getMiniGameList().forEach(game -> mw.startGame(game.getSettings().getTitle()));
+				mw.getMiniGameList().forEach(game -> controlManager.startGame(game.getSettings().getTitle()));
 			}
 			// finish all games
 			else if (icon.equals(MiniGameMenu.BaseIcon.LEAVE_GAME.getItem())) {

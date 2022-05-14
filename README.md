@@ -32,8 +32,8 @@
 - `out-of-game`: Start all games
 
 ### `Leave`
-- `in-game`: Leave or finish game the player is participating in with all participants and viewers
-- `out-of-game`: Leave or finish all games
+- `in-game`: Leave + finish game the player is participating in with all participants and viewers
+- `out-of-game`: Leave + finish all games
 
 ### `Minigame icons`
 - `join`: Left-click (All players join the game)

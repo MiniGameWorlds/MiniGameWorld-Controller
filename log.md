@@ -1,5 +1,6 @@
 # TODO
-- Send result message after command executed
+- Change to permission from OP of control access
+
 
 ---
 
@@ -18,3 +19,5 @@
 # 2022-05-15
 - Change game start click type in menu
 - Add start delay
+- Send control result message
+- Release 0.4
