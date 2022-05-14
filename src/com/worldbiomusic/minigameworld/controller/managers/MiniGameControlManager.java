@@ -1,9 +1,16 @@
 package com.worldbiomusic.minigameworld.controller.managers;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import com.wbm.plugin.util.SoundTool;
+import com.wbm.plugin.util.instance.Counter;
 import com.worldbiomusic.minigameworld.MiniGameWorldMain;
 import com.worldbiomusic.minigameworld.api.MiniGameAccessor;
 import com.worldbiomusic.minigameworld.api.MiniGameWorld;
 import com.worldbiomusic.minigameworld.api.MiniGameWorldUtils;
+import com.worldbiomusic.minigameworld.controller.utils.Settings;
 import com.worldbiomusic.minigameworld.controller.utils.Utils;
 import com.worldbiomusic.minigameworld.customevents.minigame.MiniGameExceptionEvent;
 
@@ -17,19 +24,42 @@ public class MiniGameControlManager {
 	}
 
 	public boolean startGame(String title) {
+		return startGame(title, Settings.START_DELAY);
+	}
+
+	public boolean startGame(String title, int delay) {
 		MiniGameAccessor minigame = MiniGameWorldUtils.getMiniGameWithTitle(title);
 		if (minigame == null) {
 			return false;
 		}
 
-		// set flag to true
-		this.minigameStartManager.setFlag(minigame, true);
+		Counter counter = new Counter(delay);
 
-		// start game
-		this.mw.startGame(title);
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				if (counter.getCount() > 0) {
+					minigame.getPlayers().forEach(p -> {
+						p.sendMessage(ChatColor.AQUA + "Starts in ... " + ChatColor.RED + ChatColor.BOLD
+								+ counter.getCount() + ChatColor.RESET + " seconds");
+						SoundTool.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT);
+					});
+					counter.removeCount(1);
+				} else {
+					// set flag to true
+					minigameStartManager.setFlag(minigame, true);
 
-		// set flag to false
-		this.minigameStartManager.setFlag(minigame, false);
+					// start game
+					mw.startGame(title);
+
+					// set flag to false
+					minigameStartManager.setFlag(minigame, false);
+
+					// cancel task
+					cancel();
+				}
+			}
+		}.runTaskTimer(MiniGameWorldMain.getInstance(), 0, 20);
 
 		return true;
 	}

@@ -17,4 +17,4 @@
 
 # 2022-05-15
 - Change game start click type in menu
-- 
+- Add start delay
