@@ -158,6 +158,8 @@ public class MiniGameControllerMenuManager {
 		MiniGameWorld mw = MiniGameWorldControllerMain.getMiniGameWorld();
 		String title = icon.getItemMeta().getDisplayName();
 
+		boolean isShiftClick = e.getInventoryClickEvent().isShiftClick();
+
 		ClickType click = e.getClick();
 		if (click == ClickType.LEFT) {
 			this.controlManager.joinGame(title);
@@ -165,10 +167,10 @@ public class MiniGameControllerMenuManager {
 			this.controlManager.viewGame(title);
 		} else if (click == ClickType.DROP) {
 			this.controlManager.finishGame(title);
-		} else if (click == ClickType.DROP && e.getInventoryClickEvent().isShiftClick()) {
+		} else if (click == ClickType.DROP && isShiftClick) {
 			MiniGameAccessor minigame = MiniGameWorldUtils.getMiniGameWithTitle(title);
 			minigame.getViewers().forEach(mw::unviewGame);
-		} else if (click == ClickType.MIDDLE) {
+		} else if (click == ClickType.SHIFT_LEFT) {
 			this.controlManager.startGame(title);
 		}
 	}

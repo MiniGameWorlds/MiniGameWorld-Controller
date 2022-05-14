@@ -40,7 +40,7 @@
 - `view`: Right-click (All players view the game)
 - `leave`: Q (Leave or finish game)
 - `unview`: Shift + Q (All game viewers quit view)
-- `start`: Wheel-click
+- `start`: Shift + Left-click (clicked minigame will start)
 
 
 

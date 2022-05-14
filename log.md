@@ -1,4 +1,5 @@
 # TODO
+- Send result message after command executed
 
 ---
 
@@ -13,3 +14,7 @@
 # 2022-05-01
 - Add control menu mode
 - Release 0.3
+
+# 2022-05-15
+- Change game start click type in menu
+- 
