@@ -42,7 +42,7 @@ public class MiniGameControlManager {
 					minigame.getPlayers().forEach(p -> {
 						p.sendMessage(ChatColor.AQUA + "Starts in ... " + ChatColor.RED + ChatColor.BOLD
 								+ counter.getCount() + ChatColor.RESET + " seconds");
-						SoundTool.playSound(p, Sound.BLOCK_NOTE_BLOCK_BIT);
+						SoundTool.play(p, Sound.BLOCK_NOTE_BLOCK_BIT);
 					});
 					counter.removeCount(1);
 				} else {

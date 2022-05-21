@@ -21,3 +21,7 @@
 - Add start delay
 - Send control result message
 - Release 0.4
+
+# 2022-05-21
+- Update for API updates
+- Release `0.5`
