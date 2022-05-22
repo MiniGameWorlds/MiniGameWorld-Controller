@@ -1,5 +1,5 @@
 # TODO
-- Change to permission from OP of control access
+- Change to permission from OP of control access (`minigameworld.controller`)
 
 
 ---
@@ -24,4 +24,7 @@
 
 # 2022-05-21
 - Update for API updates
+
+# 2022-05-22
+- Change restriction permission
 - Release `0.5`

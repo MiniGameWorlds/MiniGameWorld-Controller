@@ -3,7 +3,6 @@ package com.worldbiomusic.minigameworld.controller.listeners;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.worldbiomusic.minigameworld.api.MiniGameAccessor;
@@ -33,44 +32,10 @@ public class MiniGameEventListener implements Listener {
 		e.setCancelled(!canStart);
 	}
 
-	/*
-	 * Block MiniGameWorld plugin command execution
-	 */
-	@EventHandler
-	public void onPlayerTryToUseMiniGameWorldCmd(PlayerCommandPreprocessEvent e) {
-//		Player p = e.getPlayer();
-//		if (p.isOp()) {
-//			return;
-//		}
-//
-//		String cmd = e.getMessage().substring(1).split(" ")[0];
-//
-//		List<String> blockedCmds = new ArrayList<>();
-//		PluginDescriptionFile pluginYml = MiniGameWorldMain.getInstance().getDescription();
-//		Map<String, Map<String, Object>> cmdInfo = pluginYml.getCommands();
-//
-//		// prevent all commands and aliases of MiniGameWorld plugin
-//		cmdInfo.forEach((k, v) -> {
-//			blockedCmds.add(k);
-//			@SuppressWarnings("unchecked")
-//			List<String> aliases = (List<String>) v.get("aliases");
-//			aliases.forEach(blockedCmds::add);
-//		});
-//
-//		// check cmd is one of blockedCmds
-//		if (blockedCmds.contains(cmd)) {
-//			p.sendMessage(ChatColor.RED + "MiniGameWorld plugin is under control by the OPs");
-//			e.setCancelled(true);
-//		}
-	}
-
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
-
-		if (!p.isOp()) {
-			Utils.setBasicPermissionsToFalse(p);
-		}
+		Utils.setAccessPermission(p, p.isOp());
 	}
 
 	@EventHandler
