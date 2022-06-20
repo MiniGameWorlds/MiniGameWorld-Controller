@@ -28,3 +28,16 @@
 # 2022-05-22
 - Change restriction permission
 - Release `0.5`
+
+# 2022-06-21
+- Fix MODE changing bug
+
+
+
+
+
+
+
+
+
+

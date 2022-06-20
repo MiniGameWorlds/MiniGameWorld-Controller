@@ -11,6 +11,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.wbm.plugin.util.ItemStackTool;
+import com.wbm.plugin.util.Utils;
 import com.worldbiomusic.minigameworld.api.MiniGameAccessor;
 import com.worldbiomusic.minigameworld.api.MiniGameWorld;
 import com.worldbiomusic.minigameworld.api.MiniGameWorldUtils;
@@ -124,6 +125,8 @@ public class MiniGameControllerMenuManager {
 		ItemStack icon = e.getIcon();
 		Player p = e.getPlayer();
 
+		// START_ICON and LEAVE_GAME icon works different in player's position (out of
+		// minigame or in minigame)
 		if (MiniGameWorldUtils.checkPlayerIsInMiniGame(p)) {
 			MiniGameAccessor minigame = MiniGameWorldUtils.getInMiniGame(p);
 			String minigameTitle = minigame.getSettings().getTitle();
@@ -133,6 +136,7 @@ public class MiniGameControllerMenuManager {
 				this.controlManager.finishGame(minigameTitle);
 			}
 		} else {
+
 			// start all games
 			if (icon.equals(OptionIcon.START_ICON.getItem())) {
 				MiniGameWorld mw = MiniGameWorldControllerMain.getMiniGameWorld();
@@ -142,11 +146,11 @@ public class MiniGameControllerMenuManager {
 			else if (icon.equals(MiniGameMenu.BaseIcon.LEAVE_GAME.getItem())) {
 				Bukkit.getPluginManager().callEvent(new MiniGameServerExceptionEvent("finished-by-controller"));
 			}
-			// change control mode
-			else if (icon.equals(OptionIcon.CONTROL_ON_ICON.getItem())
-					|| icon.equals(OptionIcon.CONTROL_OFF_ICON.getItem())) {
-				changeControlMode(e.getMenu());
-			}
+		}
+
+		// change control mode
+		if (icon.equals(OptionIcon.CONTROL_ON_ICON.getItem()) || icon.equals(OptionIcon.CONTROL_OFF_ICON.getItem())) {
+			changeControlMode(e.getMenu());
 		}
 	}
 
