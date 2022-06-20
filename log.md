@@ -31,7 +31,7 @@
 
 # 2022-06-21
 - Fix MODE changing bug
-
+- Release `0.6`
 
 
 

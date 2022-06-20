@@ -1,6 +1,6 @@
 name: MiniGameWorld-Controller
 main: com.worldbiomusic.minigameworld.controller.MiniGameWorldControllerMain
-version: 0.5
+version: 0.6
 author: worldbiomusic
 api-version: 1.14
 depend: [MiniGameWorld]
