@@ -1,4 +1,4 @@
-package com.worldbiomusic.minigameworld.controller.cmds;
+package com.minigameworld.controller.cmds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +10,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.worldbiomusic.minigameworld.api.MiniGameAccessor;
-import com.worldbiomusic.minigameworld.api.MiniGameWorld;
-import com.worldbiomusic.minigameworld.api.MiniGameWorldUtils;
-import com.worldbiomusic.minigameworld.controller.managers.MiniGameControlManager;
-import com.worldbiomusic.minigameworld.util.Setting;
+import com.minigameworld.api.MiniGameAccessor;
+import com.minigameworld.api.MiniGameWorld;
+import com.minigameworld.api.MwUtil;
+import com.minigameworld.controller.managers.MiniGameControlManager;
+import com.minigameworld.util.Setting;
 
 /*
  * [Commands]
@@ -87,12 +87,12 @@ public class ControlCommand implements CommandExecutor {
 			Player p = (Player) sender;
 
 			// check player is in any minigame to start
-			if (!MiniGameWorldUtils.checkPlayerIsInMiniGame(p)) {
+			if (!MwUtil.isInGame(p)) {
 				p.sendMessage("You are NOT in any minigame to start");
 				return;
 			}
 
-			MiniGameAccessor minigame = MiniGameWorldUtils.getInMiniGame(p);
+			MiniGameAccessor minigame = MwUtil.getInGame(p);
 			minigameTitle = minigame.getSettings().getTitle();
 		} else if (args.length == 2) {
 			// start <minigame> minigame
@@ -123,12 +123,12 @@ public class ControlCommand implements CommandExecutor {
 			Player p = (Player) sender;
 
 			// check player is in any minigmae to start
-			if (!MiniGameWorldUtils.checkPlayerIsInMiniGame(p)) {
+			if (!MwUtil.isInGame(p)) {
 				p.sendMessage("You are NOT in any minigame to finish");
 				return;
 			}
 
-			MiniGameAccessor minigame = MiniGameWorldUtils.getInMiniGame(p);
+			MiniGameAccessor minigame = MwUtil.getInGame(p);
 			minigameTitle = minigame.getSettings().getTitle();
 		} else if (args.length == 2) {
 			// start <minigame> minigame

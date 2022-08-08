@@ -1,4 +1,4 @@
-package com.worldbiomusic.minigameworld.controller.cmds;
+package com.minigameworld.controller.cmds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
-import com.worldbiomusic.minigameworld.api.MiniGameWorld;
+import com.minigameworld.api.MiniGameWorld;
 
 /*
  * [Commands]
@@ -54,7 +54,7 @@ public class ControlCommandTabCompleter implements TabCompleter {
 	}
 
 	private void addMiniGameTitles() {
-		this.mw.getMiniGameList().forEach(m -> {
+		this.mw.getTemplateGames().forEach(m -> {
 			String minigameTitle = m.getSettings().getTitle();
 			this.candidates.add(minigameTitle);
 		});

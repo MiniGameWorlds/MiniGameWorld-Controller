@@ -1,7 +1,10 @@
 # MiniGameWorld-Controller
-- The OPs can control MiniGameWord with players (Non-OP players are under control by the OPs)
+Make OP players can control NON-OP players with minigames
+
+
 
 # Rules
+- Minigame can have only 1 instance.
 - Non-OP players can NOT use all commands and NOT access via sign block of MiniGameWorld
 - MiniGame will never start without the OPs start (`/mwc start [<minigame>]`)
 
@@ -22,9 +25,9 @@
 
 ## Icons
 ### `Control`
-- Click to switch mode (toggle)
-- With `Control` state, menu icon works on control mode
-- With `Default` state, menu icon works on default mode
+Click to switch mode (toggle)
+- With `Control` state, can control only NON-OP players
+- With `Default` state, only control you
 
 ### `Start`
 - `in-game`: Start game the player is participating in

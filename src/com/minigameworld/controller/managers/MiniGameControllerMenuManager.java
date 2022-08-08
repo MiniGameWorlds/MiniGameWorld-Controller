@@ -1,4 +1,4 @@
-package com.worldbiomusic.minigameworld.controller.managers;
+package com.minigameworld.controller.managers;
 
 import java.util.Arrays;
 
@@ -10,16 +10,17 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import com.minigameworld.api.MiniGameAccessor;
+import com.minigameworld.api.MiniGameWorld;
+import com.minigameworld.api.MwUtil;
+import com.minigameworld.controller.MiniGameWorldControllerMain;
+import com.minigameworld.controller.utils.Utils;
+import com.minigameworld.events.menu.MenuClickEvent;
+import com.minigameworld.events.minigame.MiniGameServerExceptionEvent;
+import com.minigameworld.managers.menu.MiniGameMenu;
+import com.minigameworld.managers.menu.MiniGameMenu.BaseIcon;
+import com.minigameworld.util.Setting;
 import com.wbm.plugin.util.ItemStackTool;
-import com.worldbiomusic.minigameworld.api.MiniGameAccessor;
-import com.worldbiomusic.minigameworld.api.MiniGameWorld;
-import com.worldbiomusic.minigameworld.api.MiniGameWorldUtils;
-import com.worldbiomusic.minigameworld.controller.MiniGameWorldControllerMain;
-import com.worldbiomusic.minigameworld.customevents.menu.MenuClickEvent;
-import com.worldbiomusic.minigameworld.customevents.minigame.MiniGameServerExceptionEvent;
-import com.worldbiomusic.minigameworld.managers.menu.MiniGameMenu;
-import com.worldbiomusic.minigameworld.managers.menu.MiniGameMenu.BaseIcon;
-import com.worldbiomusic.minigameworld.util.Setting;
 
 public class MiniGameControllerMenuManager {
 	private MiniGameControlManager controlManager;
@@ -126,8 +127,8 @@ public class MiniGameControllerMenuManager {
 
 		// START_ICON and LEAVE_GAME icon works different in player's position (out of
 		// minigame or in minigame)
-		if (MiniGameWorldUtils.checkPlayerIsInMiniGame(p)) {
-			MiniGameAccessor minigame = MiniGameWorldUtils.getInMiniGame(p);
+		if (MwUtil.isInGame(p)) {
+			MiniGameAccessor minigame = MwUtil.getInGame(p);
 			String minigameTitle = minigame.getSettings().getTitle();
 			if (icon.equals(OptionIcon.START_ICON.getItem())) {
 				this.controlManager.startGame(minigameTitle);
@@ -135,11 +136,10 @@ public class MiniGameControllerMenuManager {
 				this.controlManager.finishGame(minigameTitle);
 			}
 		} else {
-
 			// start all games
 			if (icon.equals(OptionIcon.START_ICON.getItem())) {
 				MiniGameWorld mw = MiniGameWorldControllerMain.getMiniGameWorld();
-				mw.getMiniGameList().forEach(game -> controlManager.startGame(game.getSettings().getTitle()));
+				mw.getInstanceGames().forEach(game -> controlManager.startGame(game.getSettings().getTitle()));
 			}
 			// finish all games
 			else if (icon.equals(MiniGameMenu.BaseIcon.LEAVE_GAME.getItem())) {
@@ -156,7 +156,7 @@ public class MiniGameControllerMenuManager {
 	private void processGameIcon(MenuClickEvent e) {
 		ItemStack icon = e.getIcon();
 		MiniGameWorld mw = MiniGameWorldControllerMain.getMiniGameWorld();
-		String title = icon.getItemMeta().getDisplayName();
+		String title = ChatColor.stripColor(icon.getItemMeta().getDisplayName());
 
 		boolean isShiftClick = e.getInventoryClickEvent().isShiftClick();
 
@@ -168,7 +168,7 @@ public class MiniGameControllerMenuManager {
 		} else if (click == ClickType.DROP) {
 			this.controlManager.finishGame(title);
 		} else if (click == ClickType.DROP && isShiftClick) {
-			MiniGameAccessor minigame = MiniGameWorldUtils.getMiniGameWithTitle(title);
+			MiniGameAccessor minigame = Utils.getGame(title);
 			minigame.getViewers().forEach(mw::unviewGame);
 		} else if (click == ClickType.SHIFT_LEFT) {
 			this.controlManager.startGame(title);
