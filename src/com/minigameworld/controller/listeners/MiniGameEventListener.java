@@ -30,8 +30,8 @@ public class MiniGameEventListener implements Listener {
 
 		// cancel or not with start flag
 		boolean canStart = this.minigameStartFlag.getFlag(minigame);
-		System.out.println(minigame.getSettings().getTitle() + ", canStart: " + canStart + ", id: "
-				+ minigame.getSettings().getId());
+		System.out.println(minigame.settings().getTitle() + ", canStart: " + canStart + ", id: "
+				+ minigame.settings().getId());
 		e.setCancelled(!canStart);
 	}
 

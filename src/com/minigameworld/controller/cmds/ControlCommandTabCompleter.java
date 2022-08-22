@@ -54,8 +54,8 @@ public class ControlCommandTabCompleter implements TabCompleter {
 	}
 
 	private void addMiniGameTitles() {
-		this.mw.getTemplateGames().forEach(m -> {
-			String minigameTitle = m.getSettings().getTitle();
+		this.mw.templateGames().forEach(m -> {
+			String minigameTitle = m.settings().getTitle();
 			this.candidates.add(minigameTitle);
 		});
 	}

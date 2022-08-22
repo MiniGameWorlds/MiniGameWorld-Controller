@@ -40,7 +40,7 @@ public class MiniGameControlManager {
 			@Override
 			public void run() {
 				if (counter.getCount() > 0) {
-					minigame.getPlayers().forEach(p -> {
+					minigame.players().forEach(p -> {
 						p.sendMessage(ChatColor.AQUA + "Starts in ... " + ChatColor.RED + ChatColor.BOLD
 								+ counter.getCount() + ChatColor.RESET + " seconds");
 						SoundTool.play(p, Sound.BLOCK_NOTE_BLOCK_BIT);
@@ -51,7 +51,7 @@ public class MiniGameControlManager {
 					minigameStartFlag.setFlag(minigame, true);
 
 					// start game
-					String id = minigame.getSettings().getId();
+					String id = minigame.settings().getId();
 					mw.startGame(title, id);
 
 					// set flag to false
@@ -76,7 +76,7 @@ public class MiniGameControlManager {
 			return false;
 		}
 
-		int count = minigame.getPlayers().size();
+		int count = minigame.players().size();
 
 		// call exception event to finish the game
 		MiniGameExceptionEvent exception = new MiniGameExceptionEvent(minigame, "finished-by-controller");
@@ -119,9 +119,9 @@ public class MiniGameControlManager {
 			return false;
 		}
 
-		int joinedCount = minigame.getViewers().size();
+		int joinedCount = minigame.viewers().size();
 		Utils.nonOps().forEach(p -> this.mw.viewGame(p, title));
-		joinedCount = minigame.getViewers().size() - joinedCount;
+		joinedCount = minigame.viewers().size() - joinedCount;
 
 		// msg to OPs
 		sendMsgToOps(joinedCount + " players started viewing " + title);

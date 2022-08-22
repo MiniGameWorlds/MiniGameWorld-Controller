@@ -129,7 +129,7 @@ public class MiniGameControllerMenuManager {
 		// minigame or in minigame)
 		if (MwUtil.isInGame(p)) {
 			MiniGameAccessor minigame = MwUtil.getInGame(p);
-			String minigameTitle = minigame.getSettings().getTitle();
+			String minigameTitle = minigame.settings().getTitle();
 			if (icon.equals(OptionIcon.START_ICON.getItem())) {
 				this.controlManager.startGame(minigameTitle);
 			} else if (icon.equals(MiniGameMenu.BaseIcon.LEAVE_GAME.getItem())) {
@@ -139,7 +139,7 @@ public class MiniGameControllerMenuManager {
 			// start all games
 			if (icon.equals(OptionIcon.START_ICON.getItem())) {
 				MiniGameWorld mw = MiniGameWorldControllerMain.getMiniGameWorld();
-				mw.getInstanceGames().forEach(game -> controlManager.startGame(game.getSettings().getTitle()));
+				mw.instanceGames().forEach(game -> controlManager.startGame(game.settings().getTitle()));
 			}
 			// finish all games
 			else if (icon.equals(MiniGameMenu.BaseIcon.LEAVE_GAME.getItem())) {
@@ -169,7 +169,7 @@ public class MiniGameControllerMenuManager {
 			this.controlManager.finishGame(title);
 		} else if (click == ClickType.DROP && isShiftClick) {
 			MiniGameAccessor minigame = Utils.getGame(title);
-			minigame.getViewers().forEach(mw::unviewGame);
+			minigame.viewers().forEach(mw::unviewGame);
 		} else if (click == ClickType.SHIFT_LEFT) {
 			this.controlManager.startGame(title);
 		}

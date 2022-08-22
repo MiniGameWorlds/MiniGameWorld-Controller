@@ -34,8 +34,8 @@ public class Utils {
 	 */
 	public static MiniGameAccessor getGame(String rawTitle) {
 		String title = ChatColor.stripColor(rawTitle);
-		List<MiniGameAccessor> minigames = MiniGameWorldControllerMain.getMiniGameWorld().getInstanceGames().stream()
-				.filter(g -> g.getSettings().getTitle().equals(title)).toList();
+		List<MiniGameAccessor> minigames = MiniGameWorldControllerMain.getMiniGameWorld().instanceGames().stream()
+				.filter(g -> g.settings().getTitle().equals(title)).toList();
 
 		return minigames.isEmpty() ? null : minigames.get(0);
 	}

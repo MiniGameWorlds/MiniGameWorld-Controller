@@ -26,6 +26,6 @@ public class MiniGameStartFlag {
 	}
 
 	private String getMinigameKey(MiniGameAccessor m) {
-		return m.getSettings().getTitle() + "_" + m.getSettings().getId();
+		return m.settings().getTitle() + "_" + m.settings().getId();
 	}
 }

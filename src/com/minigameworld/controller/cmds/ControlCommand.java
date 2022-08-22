@@ -93,7 +93,7 @@ public class ControlCommand implements CommandExecutor {
 			}
 
 			MiniGameAccessor minigame = MwUtil.getInGame(p);
-			minigameTitle = minigame.getSettings().getTitle();
+			minigameTitle = minigame.settings().getTitle();
 		} else if (args.length == 2) {
 			// start <minigame> minigame
 			minigameTitle = args[1];
@@ -129,7 +129,7 @@ public class ControlCommand implements CommandExecutor {
 			}
 
 			MiniGameAccessor minigame = MwUtil.getInGame(p);
-			minigameTitle = minigame.getSettings().getTitle();
+			minigameTitle = minigame.settings().getTitle();
 		} else if (args.length == 2) {
 			// start <minigame> minigame
 			minigameTitle = args[1];
